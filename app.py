@@ -1,32 +1,16 @@
-import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import google.generativeai as genai
-from dotenv import load_dotenv
-
-# Load env variables
-load_dotenv()
+import os
 
 app = Flask(__name__)
 CORS(app)
 
-# Gemini API setup
-API_KEY = os.getenv("GEMINI_API_KEY")
-
-if not API_KEY:
-    raise ValueError("GEMINI_API_KEY not found in environment variables")
-
-genai.configure(api_key=API_KEY)
-model = genai.GenerativeModel("gemini-1.5-flash")
-
-
-# 🔥 HEALTH CHECK ROUTE (VERY IMPORTANT)
+# Health check
 @app.route("/")
 def home():
     return "Backend is running 🚀", 200
 
-
-# 🔥 CHAT ROUTE
+# Chat route (TEMP MOCK)
 @app.route("/chat", methods=["POST"])
 def chat():
     data = request.get_json()
@@ -36,18 +20,11 @@ def chat():
 
     message = data["message"]
 
-    try:
-        response = model.generate_content(message)
-        return jsonify({"response": response.text})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    # TEMP RESPONSE (no Gemini)
+    return jsonify({
+        "response": f"You said: {message}"
+    })
 
-
-# 🔥 REQUIRED FOR RENDER
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
-
-
-
-
