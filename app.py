@@ -18,10 +18,6 @@ genai.configure(api_key=API_KEY)
 # Use a model appropriate for chat - Gemini Pro is standard for text
 model = genai.GenerativeModel('gemini-1.5-flash')
 
-@app.route('/')
-def index():
-    return render_template('index.html')
-
 @app.route('/chat', methods=['POST'])
 def chat():
     try:
@@ -52,5 +48,7 @@ def chat():
         print(f"Error: {e}")
         return jsonify({'error': str(e)}), 500
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port) 
+
